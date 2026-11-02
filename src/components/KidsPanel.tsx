@@ -48,21 +48,21 @@ export function KidsPanel() {
   const cfg = buildAutoexec({ dpi, sens, crosshair: cross, optimize, title: activePro?.name });
 
   return (
-    <div className="min-h-screen bg-background text-foreground money-bg">
+    <div className="min-h-screen bg-background text-foreground money-bg minecraft-bg">
       <header className="border-b border-border bg-card/80 backdrop-blur sticky top-0 z-10">
         <div className="mx-auto max-w-7xl flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
-            <span className="text-3xl">💵</span>
-            <h1 className="font-display text-5xl tracking-widest text-primary">KIDS</h1>
-            <span className="hidden sm:block text-xs uppercase tracking-[0.3em] text-muted-foreground">TALIGADIS FOREVER - PAINEL GAMES</span>
+            <span className="flex h-11 w-11 items-center justify-center rounded-lg border border-emerald-400/40 bg-emerald-400/10 text-2xl">⛏️</span>
+            <div><h1 className="font-display text-3xl sm:text-4xl tracking-[0.18em] text-emerald-300">KIDS</h1><p className="text-[10px] uppercase tracking-[0.32em] text-emerald-100/60">Gaming Hub · Minecraft Edition</p></div>
+            <span className="hidden sm:block text-xs uppercase tracking-[0.3em] text-muted-foreground">GAMING CONTROL CENTER</span>
           </div>
-          <span className="font-display text-xl text-gold">$ eDPI {edpi(dpi, sens)}</span>
+          <span className="rounded-lg border border-emerald-400/30 bg-black/40 px-4 py-2 font-display text-lg text-emerald-300">eDPI {edpi(dpi, sens)}</span>
         </div>
       </header>
 
       <div className="mx-auto max-w-7xl grid lg:grid-cols-[220px_1fr] gap-6 p-6">
-        <nav className="space-y-2">
-          <p className="text-xs uppercase tracking-widest text-muted-foreground mb-2">Áreas de jogos</p>
+        <nav className="space-y-2 rounded-xl border border-emerald-400/20 bg-black/55 p-4 backdrop-blur-xl">
+          <p className="mb-3 text-xs uppercase tracking-[0.25em] text-emerald-200/60">Selecionar jogo</p>
           {GAMES.map((g) => (
             <button key={g.id} disabled={!g.ready} onClick={() => setGame(g.id)}
               className={`w-full text-left px-4 py-3 rounded-md border font-semibold transition ${game === g.id ? "bg-primary text-primary-foreground border-primary" : "border-border bg-card hover:border-primary"} disabled:opacity-40`}>
@@ -179,8 +179,8 @@ export function KidsPanel() {
 
 function Panel({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-lg border border-border bg-card p-5 shadow-[var(--shadow-red)]">
-      <h2 className="font-display text-2xl tracking-widest text-primary mb-4 border-b border-border pb-2">{title}</h2>
+    <section className="rounded-xl border border-emerald-400/20 bg-[#07130f]/85 p-5 shadow-[0_12px_40px_-18px_rgba(16,185,129,.35)] backdrop-blur-xl">
+      <h2 className="mb-4 border-b border-emerald-400/20 pb-3 font-display text-2xl tracking-widest text-emerald-300">{title}</h2>
       {children}
     </section>
   );
