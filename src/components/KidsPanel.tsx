@@ -11,6 +11,8 @@ const GAMES = [
   { id: "gta", name: "GTA V RP", ready: false },
 ];
 
+declare global { interface Window { kids?: { saveCfg: (t: string) => Promise<string> } } }
+
 function download(name: string, text: string) {
   const url = URL.createObjectURL(new Blob([text], { type: "text/plain" }));
   const a = document.createElement("a");
@@ -157,7 +159,11 @@ export function KidsPanel() {
             <Panel title="Aplicar no jogo">
               <pre className="text-xs font-mono bg-background p-3 rounded border border-border h-48 overflow-auto">{cfg}</pre>
               <div className="flex gap-2 mt-3">
-                <button onClick={() => download("autoexec.cfg", cfg)} className="btn">Baixar autoexec.cfg</button>
+                {typeof window !== "undefined" && window.kids ? (
+                  <button onClick={async () => { try { flash("Salvo em: " + (await window.kids!.saveCfg(cfg))); } catch { flash("CS2 não encontrado"); } }} className="btn">Aplicar no CS2</button>
+                ) : (
+                  <button onClick={() => download("autoexec.cfg", cfg)} className="btn">Baixar autoexec.cfg</button>
+                )}
                 <button onClick={() => copy(cfg)} className="btn-outline">Copiar tudo</button>
               </div>
               <p className="text-xs text-muted-foreground mt-3">Coloque o arquivo em <code>Steam/steamapps/common/Counter-Strike Global Offensive/game/csgo/cfg</code> e adicione <code>+exec autoexec.cfg</code> nas opções de inicialização.</p>
