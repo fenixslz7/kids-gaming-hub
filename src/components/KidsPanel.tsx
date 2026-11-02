@@ -24,7 +24,7 @@ export function KidsPanel() {
   const [game, setGame] = useState("cs2");
   const [dpi, setDpi] = useState(400);
   const [sens, setSens] = useState(2);
-  const [cross, setCross] = useState<Crosshair>(CROSSHAIRS["Clássica Verde"]);
+  const [cross, setCross] = useState<Crosshair>(CROSSHAIRS["Clássica Verde"]!);
   const [optimize, setOptimize] = useState(true);
   const [activePro, setActivePro] = useState<ProConfig | null>(null);
   const [toast, setToast] = useState("");
