@@ -44,6 +44,7 @@ export function KidsPanel() {
   const [msaa, setMsaa] = useState(0);
   const [filtering, setFiltering] = useState(0);
   const [videoBusy, setVideoBusy] = useState(false);
+  const [hasBridge, setHasBridge] = useState(false);
 
   useEffect(() => {
     const s = localStorage.getItem("kids-cs2");
@@ -52,6 +53,12 @@ export function KidsPanel() {
   useEffect(() => {
     localStorage.setItem("kids-cs2", JSON.stringify({ dpi, sens, cross, optimize }));
   }, [dpi, sens, cross, optimize]);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.kids?.getVideoProfiles) return;
+    setHasBridge(true);
+    window.kids.getVideoProfiles().then(setVideoProfiles).catch(() => setVideoProfiles([]));
+  }, []);
 
   const flash = (m: string) => { setToast(m); setTimeout(() => setToast(""), 2200); };
   const copy = (t: string, m = "Copiado!") => { navigator.clipboard.writeText(t); flash(m); };
@@ -140,7 +147,7 @@ export function KidsPanel() {
 
 
           <Panel title="Resolução & Configurações de Vídeo">
-            {window.kids?.getVideoProfiles ? (
+            {hasBridge ? (
               <>
                 {videoProfiles.length > 0 ? (
                   <>
@@ -168,7 +175,7 @@ export function KidsPanel() {
                       if (!videoProfileId) return flash("Selecione uma conta Steam.");
                       setVideoBusy(true);
                       try {
-                        const result = await window.kids!.saveVideoConfig({ profileId: videoProfileId, width: videoWidth, height: videoHeight, aspect: videoAspect, fullscreen, vsync, shadows, textures, particles, ambientOcclusion, msaa, filtering });
+                        await window.kids!.saveVideoConfig({ profileId: videoProfileId, width: videoWidth, height: videoHeight, aspect: videoAspect, fullscreen, vsync, shadows, textures, particles, ambientOcclusion, msaa, filtering });
                         flash("Vídeo aplicado! Feche e abra o CS2. Backup salvo.");
                       } catch (error) { flash(error instanceof Error ? error.message : "Falha ao salvar vídeo."); }
                       finally { setVideoBusy(false); }
