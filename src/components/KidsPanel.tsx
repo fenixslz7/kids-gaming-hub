@@ -4,6 +4,7 @@ import {
   CROSSHAIRS, PROS, LAUNCH_OPTIONS, OPTIMIZE_CFG, buildAutoexec, convertSens, crosshairCfg, edpi,
   type Crosshair, type ProConfig,
 } from "@/lib/cs2";
+import type { VideoProfile } from "@/lib/kids-bridge";
 
 const GAMES = [
   { id: "cs2", name: "Counter-Strike 2", ready: true },
@@ -11,17 +12,6 @@ const GAMES = [
   { id: "fn", name: "Fortnite", ready: false },
   { id: "gta", name: "GTA V RP", ready: false },
 ];
-
-type VideoProfile = { id: string; label: string; file: string; exists: boolean; values: Record<string, string> };
-declare global {
-  interface Window {
-    kids?: {
-      saveCfg: (t: string) => Promise<string>;
-      getVideoProfiles: () => Promise<VideoProfile[]>;
-      saveVideoConfig: (payload: Record<string, string | number | boolean>) => Promise<{ file: string; backup: string | null }>;
-    };
-  }
-}
 
 function download(name: string, text: string) {
   const url = URL.createObjectURL(new Blob([text], { type: "text/plain" }));

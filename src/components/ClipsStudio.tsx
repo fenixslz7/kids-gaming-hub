@@ -1,14 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-
-type Source = { id: string; name: string };
-declare global {
-  interface Window { kids?: {
-    getClipSources: () => Promise<Source[]>;
-    setClipHotkey: (key: string) => Promise<string>;
-    saveClip: (payload: { data: string; suggestedName: string }) => Promise<{ canceled: boolean; filePath?: string }>;
-    onClipHotkey: (callback: () => void) => () => void;
-  }; }
-}
+import type { ClipSource as Source } from "@/lib/kids-bridge";
 
 export function ClipsStudio() {
   const [sources, setSources] = useState<Source[]>([]);
