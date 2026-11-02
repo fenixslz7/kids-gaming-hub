@@ -73,6 +73,7 @@
     "electron-updater": "^6.6.2"
   },
   "devDependencies": {
+    "@electron/packager": "^20.3.0",
     "@eslint/js": "^9.32.0",
     "@lovable.dev/vite-tanstack-config": "2.26.5",
     "@testing-library/jest-dom": "^6.6.0",
@@ -81,6 +82,8 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^5.2.0",
+    "electron": "^41.0.0",
+    "electron-builder": "^26.0.12",
     "eslint": "^9.32.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.6",
@@ -93,9 +96,7 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",
     "vite": "8.1.5",
-    "vitest": "^4.1.10",
-    "electron": "^41.0.0",
-    "electron-builder": "^26.0.12"
+    "vitest": "^4.1.10"
   },
   "main": "electron/main.cjs",
   "build": {
