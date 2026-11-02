@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ClipsStudio } from "./ClipsStudio";
+import { MinecraftStudio } from "./MinecraftStudio";
 import {
   CROSSHAIRS, PROS, LAUNCH_OPTIONS, OPTIMIZE_CFG, buildAutoexec, convertSens, crosshairCfg, edpi,
   type Crosshair, type ProConfig,
@@ -22,7 +23,7 @@ function download(name: string, text: string) {
 
 export function KidsPanel() {
   const [game, setGame] = useState("cs2");
-  const [section, setSection] = useState<"game" | "clips">("game");
+  const [section, setSection] = useState<"game" | "clips" | "minecraft">("game");
   const [dpi, setDpi] = useState(400);
   const [sens, setSens] = useState(2);
   const [cross, setCross] = useState<Crosshair>(CROSSHAIRS["Clássica Verde"]!);
@@ -80,6 +81,7 @@ export function KidsPanel() {
           <p className="mb-3 text-xs uppercase tracking-[0.25em] text-red-200/60">Categorias</p>
           <button onClick={() => setSection("game")} className="w-full rounded-md border border-border bg-card px-4 py-3 text-left font-semibold">🎮 Configurações de jogo</button>
           <button onClick={() => setSection("clips")} className="w-full rounded-md border border-border bg-card px-4 py-3 text-left font-semibold">🎬 Clips & Editor</button>
+          <button onClick={() => setSection("minecraft")} className="w-full rounded-md border border-border bg-card px-4 py-3 text-left font-semibold">⛏️ Minecraft</button>
           <p className="mb-3 text-xs uppercase tracking-[0.25em] text-red-200/60">Selecionar jogo</p>
           {GAMES.map((g) => (
             <button key={g.id} disabled={!g.ready} onClick={() => setGame(g.id)}
@@ -90,7 +92,7 @@ export function KidsPanel() {
         </nav>
 
         <main className="space-y-6">
-          {section === "clips" ? <ClipsStudio /> : <>
+          {section === "clips" ? <ClipsStudio /> : section === "minecraft" ? <MinecraftStudio /> : <>
           <div className="grid md:grid-cols-2 gap-6">
             <Panel title="DPI & Sensibilidade">
               <label className="text-sm text-muted-foreground">DPI do mouse</label>
