@@ -4,6 +4,7 @@ import {
   CROSSHAIRS, PROS, LAUNCH_OPTIONS, OPTIMIZE_CFG, buildAutoexec, convertSens, crosshairCfg, edpi,
   type Crosshair, type ProConfig,
 } from "@/lib/cs2";
+import type { VideoProfile } from "@/lib/kids-bridge";
 
 const GAMES = [
   { id: "cs2", name: "Counter-Strike 2", ready: true },
@@ -11,17 +12,6 @@ const GAMES = [
   { id: "fn", name: "Fortnite", ready: false },
   { id: "gta", name: "GTA V RP", ready: false },
 ];
-
-type VideoProfile = { id: string; label: string; file: string; exists: boolean; values: Record<string, string> };
-declare global {
-  interface Window {
-    kids?: {
-      saveCfg: (t: string) => Promise<string>;
-      getVideoProfiles: () => Promise<VideoProfile[]>;
-      saveVideoConfig: (payload: Record<string, string | number | boolean>) => Promise<{ file: string; backup: string | null }>;
-    };
-  }
-}
 
 function download(name: string, text: string) {
   const url = URL.createObjectURL(new Blob([text], { type: "text/plain" }));
@@ -158,7 +148,7 @@ export function KidsPanel() {
                       <label className="text-sm">Largura (px)<input type="number" min="640" max="7680" value={videoWidth} onChange={(e) => setVideoWidth(Number(e.target.value))} className="w-full rounded border border-input bg-background p-2 mt-1" /></label>
                       <label className="text-sm">Altura (px)<input type="number" min="480" max="4320" value={videoHeight} onChange={(e) => setVideoHeight(Number(e.target.value))} className="w-full rounded border border-input bg-background p-2 mt-1" /></label>
                       <label className="text-sm">Proporção<select value={videoAspect} onChange={(e) => setVideoAspect(Number(e.target.value))} className="w-full rounded border border-input bg-background p-2 mt-1"><option value={0}>4:3</option><option value={1}>16:9</option><option value={2}>16:10</option></select></label>
-                      <label className="text-sm">Preset rápido<select value={`${videoWidth}x${videoHeight}`} onChange={(e) => { const [w,h] = e.target.value.split("x").map(Number); setVideoWidth(w); setVideoHeight(h); }} className="w-full rounded border border-input bg-background p-2 mt-1"><option value="1280x960">1280×960 (4:3)</option><option value="1024x768">1024×768 (4:3)</option><option value="1440x1080">1440×1080 (4:3)</option><option value="1920x1080">1920×1080 (16:9)</option><option value="1600x900">1600×900 (16:9)</option><option value="1680x1050">1680×1050 (16:10)</option><option value="2560x1440">2560×1440 (16:9)</option></select></label>
+                      <label className="text-sm">Preset rápido<select value={`${videoWidth}x${videoHeight}`} onChange={(e) => { const [w = 1280, h = 960] = e.target.value.split("x").map(Number); setVideoWidth(w); setVideoHeight(h); }} className="w-full rounded border border-input bg-background p-2 mt-1"><option value="1280x960">1280×960 (4:3)</option><option value="1024x768">1024×768 (4:3)</option><option value="1440x1080">1440×1080 (4:3)</option><option value="1920x1080">1920×1080 (16:9)</option><option value="1600x900">1600×900 (16:9)</option><option value="1680x1050">1680×1050 (16:10)</option><option value="2560x1440">2560×1440 (16:9)</option></select></label>
                     </div>
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
                       <label className="text-sm flex items-center gap-2"><input type="checkbox" checked={fullscreen} onChange={(e) => setFullscreen(e.target.checked)} /> Tela cheia</label>
