@@ -81,13 +81,13 @@ export function KidsPanel() {
           <p className="mb-3 text-xs uppercase tracking-[0.25em] text-red-200/60">Categorias</p>
           <button onClick={() => setSection("game")} className="w-full rounded-md border border-border bg-card px-4 py-3 text-left font-semibold">🎮 Configurações de jogo</button>
           <button onClick={() => setSection("clips")} className="w-full rounded-md border border-border bg-card px-4 py-3 text-left font-semibold">🎬 Clips & Editor</button>
-          <button onClick={() => setSection("minecraft")} className="w-full rounded-md border border-border bg-card px-4 py-3 text-left font-semibold">⛏️ Minecraft</button>
           <p className="mb-3 text-xs uppercase tracking-[0.25em] text-red-200/60">Selecionar jogo</p>
           {GAMES.map((g) => (
             <button key={g.id} disabled={!g.ready} onClick={() => setGame(g.id)}
               className={`w-full text-left px-4 py-3 rounded-md border font-semibold transition ${game === g.id ? "bg-primary text-primary-foreground border-primary" : "border-border bg-card hover:border-primary"} disabled:opacity-40`}>
               {g.name}{!g.ready && <span className="block text-xs font-normal">em breve</span>}
             </button>
+            {g.id === "cs2" && <button onClick={() => setSection("minecraft")} className={`w-full rounded-md border px-4 py-3 text-left font-semibold transition ${section === "minecraft" ? "border-red-400 bg-red-950/60 text-red-200" : "border-red-500/30 bg-black/70 text-zinc-200 hover:border-red-400"}`}>⛏️ Minecraft</button>}
           ))}
         </nav>
 
