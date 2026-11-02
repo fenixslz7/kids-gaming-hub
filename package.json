@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "electron:build": "vite build --config electron/vite.electron.config.ts"
   },
   "overrides": {
     "rolldown": "1.2.1"
@@ -68,7 +69,8 @@
     "tw-animate-css": "^1.3.4",
     "vaul": "^1.1.2",
     "vite-tsconfig-paths": "^6.0.2",
-    "zod": "^3.25.76"
+    "zod": "^3.25.76",
+    "electron-updater": "^6.6.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
@@ -91,6 +93,47 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",
     "vite": "8.1.5",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.10",
+    "electron": "^41.0.0",
+    "electron-builder": "^26.0.12"
+  },
+  "main": "electron/main.cjs",
+  "build": {
+    "appId": "com.kids.gaminghub",
+    "productName": "KIDS Gaming Hub",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "electron-dist/**/*",
+      "electron/main.cjs",
+      "electron/preload.cjs",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "fenixslz7",
+        "repo": "kids-gaming-hub",
+        "releaseType": "release"
+      }
+    ]
   }
 }
