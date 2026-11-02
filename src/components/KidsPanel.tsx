@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ClipsStudio } from "./ClipsStudio";
 import {
   CROSSHAIRS, PROS, LAUNCH_OPTIONS, OPTIMIZE_CFG, buildAutoexec, convertSens, crosshairCfg, edpi,
   type Crosshair, type ProConfig,
@@ -31,6 +32,7 @@ function download(name: string, text: string) {
 
 export function KidsPanel() {
   const [game, setGame] = useState("cs2");
+  const [section, setSection] = useState<"game" | "clips">("game");
   const [dpi, setDpi] = useState(400);
   const [sens, setSens] = useState(2);
   const [cross, setCross] = useState<Crosshair>(CROSSHAIRS["Clássica Verde"]!);
@@ -85,6 +87,9 @@ export function KidsPanel() {
 
       <div className="mx-auto max-w-7xl grid lg:grid-cols-[220px_1fr] gap-6 p-6">
         <nav className="space-y-2 rounded-xl border border-emerald-400/20 bg-black/55 p-4 backdrop-blur-xl">
+          <p className="mb-3 text-xs uppercase tracking-[0.25em] text-emerald-200/60">Categorias</p>
+          <button onClick={() => setSection("game")} className="w-full rounded-md border border-border bg-card px-4 py-3 text-left font-semibold">🎮 Configurações de jogo</button>
+          <button onClick={() => setSection("clips")} className="w-full rounded-md border border-border bg-card px-4 py-3 text-left font-semibold">🎬 Clips & Editor</button>
           <p className="mb-3 text-xs uppercase tracking-[0.25em] text-emerald-200/60">Selecionar jogo</p>
           {GAMES.map((g) => (
             <button key={g.id} disabled={!g.ready} onClick={() => setGame(g.id)}
@@ -95,6 +100,7 @@ export function KidsPanel() {
         </nav>
 
         <main className="space-y-6">
+          {section === "clips" ? <ClipsStudio /> : <>
           <div className="grid md:grid-cols-2 gap-6">
             <Panel title="DPI & Sensibilidade">
               <label className="text-sm text-muted-foreground">DPI do mouse</label>
@@ -233,6 +239,7 @@ export function KidsPanel() {
               <p className="text-xs text-muted-foreground mt-3">Coloque o arquivo em <code>Steam/steamapps/common/Counter-Strike Global Offensive/game/csgo/cfg</code> e adicione <code>+exec autoexec.cfg</code> nas opções de inicialização.</p>
             </Panel>
           </div>
+          </>}
         </main>
       </div>
 
