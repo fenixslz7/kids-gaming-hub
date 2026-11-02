@@ -25,6 +25,8 @@ export interface KidsBridge {
     filePath?: string;
   }>;
   onClipHotkey: (callback: () => void) => () => void;
+  minecraftApplyProfile: (profile: string) => Promise<{ file: string; backup: string }>;
+  minecraftImportFile: (kind: "mod" | "resourcepack") => Promise<{ canceled: boolean; filePath?: string }>;
 }
 
 declare global {
