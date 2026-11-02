@@ -11,7 +11,16 @@ const GAMES = [
   { id: "gta", name: "GTA V RP", ready: false },
 ];
 
-declare global { interface Window { kids?: { saveCfg: (t: string) => Promise<string> } } }
+type VideoProfile = { id: string; label: string; file: string; exists: boolean; values: Record<string, string> };
+declare global {
+  interface Window {
+    kids?: {
+      saveCfg: (t: string) => Promise<string>;
+      getVideoProfiles: () => Promise<VideoProfile[]>;
+      saveVideoConfig: (payload: Record<string, string | number | boolean>) => Promise<{ file: string; backup: string | null }>;
+    };
+  }
+}
 
 function download(name: string, text: string) {
   const url = URL.createObjectURL(new Blob([text], { type: "text/plain" }));
@@ -28,6 +37,20 @@ export function KidsPanel() {
   const [optimize, setOptimize] = useState(true);
   const [activePro, setActivePro] = useState<ProConfig | null>(null);
   const [toast, setToast] = useState("");
+  const [videoProfiles, setVideoProfiles] = useState<VideoProfile[]>([]);
+  const [videoProfileId, setVideoProfileId] = useState("");
+  const [videoWidth, setVideoWidth] = useState(1280);
+  const [videoHeight, setVideoHeight] = useState(960);
+  const [videoAspect, setVideoAspect] = useState(0);
+  const [fullscreen, setFullscreen] = useState(true);
+  const [vsync, setVsync] = useState(false);
+  const [shadows, setShadows] = useState(0);
+  const [textures, setTextures] = useState(0);
+  const [particles, setParticles] = useState(0);
+  const [ambientOcclusion, setAmbientOcclusion] = useState(0);
+  const [msaa, setMsaa] = useState(0);
+  const [filtering, setFiltering] = useState(0);
+  const [videoBusy, setVideoBusy] = useState(false);
 
   useEffect(() => {
     const s = localStorage.getItem("kids-cs2");
@@ -115,7 +138,48 @@ export function KidsPanel() {
             </Panel>
           </div>
 
-          <Panel title="Configs de Pro Players 🎩">
+
+          <Panel title="Resolução & Configurações de Vídeo">
+            {window.kids?.getVideoProfiles ? (
+              <>
+                {videoProfiles.length > 0 ? (
+                  <>
+                    <label className="text-sm text-muted-foreground">Conta Steam</label>
+                    <select className="w-full rounded border border-input bg-background p-2 my-2" value={videoProfileId} onChange={(e) => setVideoProfileId(e.target.value)}>
+                      {videoProfiles.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}
+                    </select>
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                      <label className="text-sm">Largura (px)<input type="number" min="640" max="7680" value={videoWidth} onChange={(e) => setVideoWidth(Number(e.target.value))} className="w-full rounded border border-input bg-background p-2 mt-1" /></label>
+                      <label className="text-sm">Altura (px)<input type="number" min="480" max="4320" value={videoHeight} onChange={(e) => setVideoHeight(Number(e.target.value))} className="w-full rounded border border-input bg-background p-2 mt-1" /></label>
+                      <label className="text-sm">Proporção<select value={videoAspect} onChange={(e) => setVideoAspect(Number(e.target.value))} className="w-full rounded border border-input bg-background p-2 mt-1"><option value={0}>4:3</option><option value={1}>16:9</option><option value={2}>16:10</option></select></label>
+                      <label className="text-sm">Preset rápido<select value={`${videoWidth}x${videoHeight}`} onChange={(e) => { const [w,h] = e.target.value.split("x").map(Number); setVideoWidth(w); setVideoHeight(h); }} className="w-full rounded border border-input bg-background p-2 mt-1"><option value="1280x960">1280×960 (4:3)</option><option value="1024x768">1024×768 (4:3)</option><option value="1440x1080">1440×1080 (4:3)</option><option value="1920x1080">1920×1080 (16:9)</option><option value="1600x900">1600×900 (16:9)</option><option value="1680x1050">1680×1050 (16:10)</option><option value="2560x1440">2560×1440 (16:9)</option></select></label>
+                    </div>
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
+                      <label className="text-sm flex items-center gap-2"><input type="checkbox" checked={fullscreen} onChange={(e) => setFullscreen(e.target.checked)} /> Tela cheia</label>
+                      <label className="text-sm flex items-center gap-2"><input type="checkbox" checked={vsync} onChange={(e) => setVsync(e.target.checked)} /> V-Sync</label>
+                      {([
+                        ["Sombras", shadows, setShadows], ["Texturas", textures, setTextures],
+                        ["Partículas", particles, setParticles], ["Oclusão de ambiente", ambientOcclusion, setAmbientOcclusion],
+                      ] as const).map(([label, value, setter]) => <label key={label} className="text-sm">{label}<select value={value} onChange={(e) => setter(Number(e.target.value))} className="w-full rounded border border-input bg-background p-2 mt-1"><option value={0}>Baixo</option><option value={1}>Médio</option><option value={2}>Alto</option></select></label>)}
+                      <label className="text-sm">MSAA<select value={msaa} onChange={(e) => setMsaa(Number(e.target.value))} className="w-full rounded border border-input bg-background p-2 mt-1"><option value={0}>Desativado</option><option value={2}>2x</option><option value={4}>4x</option><option value={8}>8x</option></select></label>
+                      <label className="text-sm">Filtragem de textura<select value={filtering} onChange={(e) => setFiltering(Number(e.target.value))} className="w-full rounded border border-input bg-background p-2 mt-1"><option value={0}>Bilinear</option><option value={1}>2x</option><option value={2}>4x</option><option value={3}>8x</option><option value={4}>16x</option><option value={5}>Anisotrópica máxima</option></select></label>
+                    </div>
+                    <button disabled={videoBusy} onClick={async () => {
+                      if (!videoProfileId) return flash("Selecione uma conta Steam.");
+                      setVideoBusy(true);
+                      try {
+                        const result = await window.kids!.saveVideoConfig({ profileId: videoProfileId, width: videoWidth, height: videoHeight, aspect: videoAspect, fullscreen, vsync, shadows, textures, particles, ambientOcclusion, msaa, filtering });
+                        flash("Vídeo aplicado! Feche e abra o CS2. Backup salvo.");
+                      } catch (error) { flash(error instanceof Error ? error.message : "Falha ao salvar vídeo."); }
+                      finally { setVideoBusy(false); }
+                    }} className="btn mt-4 disabled:opacity-50">{videoBusy ? "Aplicando..." : "Aplicar resolução e vídeo no CS2"}</button>
+                    <p className="text-xs text-muted-foreground mt-3">Feche o CS2 antes de aplicar. O painel edita o arquivo cs2_video.txt da conta Steam selecionada e cria um backup .kids-backup antes de alterar.</p>
+                  </>
+                ) : <p className="text-sm text-muted-foreground">Nenhuma pasta Steam/userdata encontrada. Abra o CS2 pela Steam uma vez e tente novamente.</p>}
+              </>
+            ) : <p className="text-sm text-muted-foreground">Disponível no aplicativo Windows instalado. Na versão web, use o download do autoexec.</p>}
+          </Panel>
+\n          <Panel title="Configs de Pro Players 🎩">
             <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-3">
               {PROS.map((p) => (
                 <div key={p.name} className={`rounded-md border p-4 bg-background/60 ${activePro?.name === p.name ? "border-primary" : "border-border"}`}>
