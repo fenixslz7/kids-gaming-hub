@@ -182,7 +182,7 @@ export function KidsPanel() {
                   <div className="font-display text-2xl tracking-wide">{p.name}</div>
                   <div className="text-xs text-muted-foreground mb-2">{p.team}</div>
                   <div className="text-sm">DPI {p.dpi} · Sensi {p.sens}</div>
-                  <div className="text-sm text-gold">eDPI {edpi(p.dpi, p.sens)}</div>
+                  <div className="text-sm text-red-300">eDPI {edpi(p.dpi, p.sens)}</div>
                   <div className="text-xs text-muted-foreground">{p.resolution} {p.aspect}</div>
                   <button onClick={() => applyPro(p)} className="btn w-full mt-3">Setar config</button>
                 </div>
@@ -240,7 +240,7 @@ export function KidsPanel() {
 
 function Panel({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-xl border border-red-400/20 bg-[#07130f]/85 p-5 shadow-[0_12px_40px_-18px_rgba(16,185,129,.35)] backdrop-blur-xl">
+    <section className="rounded-xl border border-red-400/20 bg-[#100708]/90 p-5 shadow-[0_12px_40px_-18px_rgba(220,25,40,.28)] backdrop-blur-xl">
       <h2 className="mb-4 border-b border-red-400/20 pb-3 font-display text-2xl tracking-widest text-red-300">{title}</h2>
       {children}
     </section>
