@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { ClipsStudio } from "./ClipsStudio";
 import { MinecraftStudio } from "./MinecraftStudio";
 import {
@@ -83,11 +83,13 @@ export function KidsPanel() {
           <button onClick={() => setSection("clips")} className="w-full rounded-md border border-border bg-card px-4 py-3 text-left font-semibold">🎬 Clips & Editor</button>
           <p className="mb-3 text-xs uppercase tracking-[0.25em] text-red-200/60">Selecionar jogo</p>
           {GAMES.map((g) => (
-            <button key={g.id} disabled={!g.ready} onClick={() => setGame(g.id)}
-              className={`w-full text-left px-4 py-3 rounded-md border font-semibold transition ${game === g.id ? "bg-primary text-primary-foreground border-primary" : "border-border bg-card hover:border-primary"} disabled:opacity-40`}>
-              {g.name}{!g.ready && <span className="block text-xs font-normal">em breve</span>}
-            </button>
-            {g.id === "cs2" && <button onClick={() => setSection("minecraft")} className={`w-full rounded-md border px-4 py-3 text-left font-semibold transition ${section === "minecraft" ? "border-red-400 bg-red-950/60 text-red-200" : "border-red-500/30 bg-black/70 text-zinc-200 hover:border-red-400"}`}>⛏️ Minecraft</button>}
+            <Fragment key={g.id}>
+              <button disabled={!g.ready} onClick={() => setGame(g.id)}
+                className={`w-full text-left px-4 py-3 rounded-md border font-semibold transition ${game === g.id ? "bg-primary text-primary-foreground border-primary" : "border-border bg-card hover:border-primary"} disabled:opacity-40`}>
+                {g.name}{!g.ready && <span className="block text-xs font-normal">em breve</span>}
+              </button>
+              {g.id === "cs2" && <button onClick={() => setSection("minecraft")} className={`w-full rounded-md border px-4 py-3 text-left font-semibold transition ${section === "minecraft" ? "border-red-400 bg-red-950/60 text-red-200" : "border-red-500/30 bg-black/70 text-zinc-200 hover:border-red-400"}`}>⛏️ Minecraft</button>}
+            </Fragment>
           ))}
         </nav>
 
@@ -177,7 +179,7 @@ export function KidsPanel() {
               </>
             ) : <p className="text-sm text-muted-foreground">Disponível no aplicativo Windows instalado. Na versão web, use o download do autoexec.</p>}
           </Panel>
-\n          <Panel title="Configs de Pro Players 🎩">
+<Panel title="Configs de Pro Players 🎩">
             <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-3">
               {PROS.map((p) => (
                 <div key={p.name} className={`rounded-md border p-4 bg-background/60 ${activePro?.name === p.name ? "border-primary" : "border-border"}`}>
