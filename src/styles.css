@@ -87,13 +87,13 @@
   --border: oklch(0.34 0.08 27);
   --input: oklch(0.34 0.08 27);
   --ring: oklch(0.62 0.23 27);
-  --gold: oklch(0.8 0.13 85);
+  --gold: oklch(0.68 0.20 27);
   --money: oklch(0.52 0.20 27);
   --shadow-red: 0 10px 30px -15px oklch(0.58 0.23 27 / 0.5);
   --chart-1: oklch(0.58 0.23 27);
-  --chart-2: oklch(0.8 0.13 85);
+  --chart-2: oklch(0.68 0.20 27);
   --chart-3: oklch(0.52 0.20 27);
-  --chart-4: oklch(0.7 0.1 40);
+  --chart-4: oklch(0.58 0.18 25);
   --chart-5: oklch(0.5 0.1 20);
   --sidebar: oklch(0.13 0.012 25);
   --sidebar-foreground: oklch(0.95 0.01 80);
@@ -119,7 +119,7 @@
 .money-bg {
   background-image:
     radial-gradient(circle at 15% 0%, oklch(0.58 0.23 27 / 0.18), transparent 40%),
-    repeating-linear-gradient(135deg, oklch(0.55 0.1 150 / 0.04) 0 2px, transparent 2px 22px);
+    repeating-linear-gradient(135deg, oklch(0.58 0.23 27 / 0.045) 0 2px, transparent 2px 22px);
 }
 @utility btn {
   @apply inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:brightness-110;
@@ -144,8 +144,8 @@
   background-image: linear-gradient(rgba(248,45,55,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(248,45,55,.035) 1px, transparent 1px);
   background-size: 32px 32px;
 }
-.money-bg.minecraft-bg header { background: rgba(3,12,8,.82); border-color: rgba(248,45,55,.25); }
-.money-bg.minecraft-bg nav button { border-color: rgba(248,45,55,.22); background: rgba(4,18,12,.75); }
+.money-bg.minecraft-bg header { background: rgba(8,5,6,.90); border-color: rgba(248,45,55,.25); }
+.money-bg.minecraft-bg nav button { border-color: rgba(248,45,55,.22); background: rgba(12,7,8,.88); }
 .money-bg.minecraft-bg nav button:hover, .money-bg.minecraft-bg nav button:focus-visible { border-color: rgba(248,45,55,.75); }
 .money-bg.minecraft-bg nav button.bg-primary { background: #a80f18; color: white; border-color: #f0444e; }
 .money-bg.minecraft-bg .btn { background: linear-gradient(180deg,#e32630,#8f0d15); box-shadow: 0 3px 0 #45070b; }
