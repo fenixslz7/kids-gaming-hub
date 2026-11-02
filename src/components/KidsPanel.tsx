@@ -54,7 +54,7 @@ export function KidsPanel() {
           <div className="flex items-center gap-3">
             <span className="text-3xl">💵</span>
             <h1 className="font-display text-5xl tracking-widest text-primary">KIDS</h1>
-            <span className="hidden sm:block text-xs uppercase tracking-[0.3em] text-muted-foreground">La Famiglia · Game Panel</span>
+            <span className="hidden sm:block text-xs uppercase tracking-[0.3em] text-muted-foreground">TALIGADIS FOREVER - PAINEL GAMES</span>
           </div>
           <span className="font-display text-xl text-gold">$ eDPI {edpi(dpi, sens)}</span>
         </div>
