@@ -89,8 +89,8 @@ export function ClipsStudio() {
   }
 
   return <div className="space-y-6">
-    <section className="rounded-xl border border-emerald-400/20 bg-[#07130f]/90 p-5">
-      <h2 className="font-display text-2xl tracking-widest text-emerald-300">CLIP STUDIO</h2>
+    <section className="rounded-xl border border-red-500/25 bg-[#100708]/90 p-5">
+      <h2 className="font-display text-2xl tracking-widest text-red-300">CLIP STUDIO</h2>
       <p className="mb-4 text-sm text-muted-foreground">Replay buffer com atalho global para salvar os últimos segundos da tela ou janela.</p>
       <div className="grid gap-4 md:grid-cols-2">
         <label className="text-sm">Tela/janela<select value={source} onChange={(e) => setSource(e.target.value)} className="mt-1 w-full rounded border border-border bg-background p-2">{sources.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}</select></label>
@@ -101,8 +101,8 @@ export function ClipsStudio() {
       <button disabled={!active} className="btn mt-4 w-full disabled:opacity-40" onClick={() => void saveReplay()}>Salvar últimos {seconds}s agora</button>
       <p className="mt-3 text-xs text-muted-foreground">A captura inicial grava a tela/janela selecionada, sem áudio do sistema. O buffer fica temporariamente na memória do computador.</p>
     </section>
-    <section className="rounded-xl border border-emerald-400/20 bg-[#07130f]/90 p-5">
-      <h2 className="mb-2 font-display text-2xl tracking-widest text-emerald-300">EDITOR DE VÍDEO</h2>
+    <section className="rounded-xl border border-red-500/25 bg-[#100708]/90 p-5">
+      <h2 className="mb-2 font-display text-2xl tracking-widest text-red-300">EDITOR DE VÍDEO</h2>
       <label className="btn inline-flex cursor-pointer">Importar vídeo<input type="file" accept="video/*" onChange={importVideo} className="hidden" /></label>
       {videoUrl && <><video ref={video} src={videoUrl} controls className="mt-4 max-h-[460px] w-full rounded bg-black" style={{ filter: `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%)` }} onLoadedMetadata={(e) => setTrimEnd(e.currentTarget.duration)} />
         <div className="mt-4 grid gap-4 md:grid-cols-3">
