@@ -6,5 +6,7 @@ contextBridge.exposeInMainWorld("kids", {
   getClipSources: () => ipcRenderer.invoke("clip-sources"),
   setClipHotkey: (key) => ipcRenderer.invoke("clip-set-hotkey", key),
   saveClip: (payload) => ipcRenderer.invoke("clip-save", payload),
+  minecraftApplyProfile: (profile) => ipcRenderer.invoke("minecraft-apply-profile", profile),
+  minecraftImportFile: (kind) => ipcRenderer.invoke("minecraft-import-file", kind),
   onClipHotkey: (callback) => { const listener = () => callback(); ipcRenderer.on("clip-hotkey", listener); return () => ipcRenderer.removeListener("clip-hotkey", listener); },
 });
