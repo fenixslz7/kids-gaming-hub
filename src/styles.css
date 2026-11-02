@@ -68,40 +68,40 @@
 
 :root {
   --radius: 0.5rem;
-  --background: oklch(0.12 0.035 155);
+  --background: oklch(0.10 0.015 25);
   --foreground: oklch(0.95 0.01 80);
-  --card: oklch(0.16 0.035 155);
+  --card: oklch(0.15 0.012 25);
   --card-foreground: oklch(0.95 0.01 80);
-  --popover: oklch(0.16 0.035 155);
+  --popover: oklch(0.15 0.012 25);
   --popover-foreground: oklch(0.95 0.01 80);
-  --primary: oklch(0.68 0.17 150);
+  --primary: oklch(0.62 0.23 27);
   --primary-foreground: oklch(0.98 0 0);
-  --secondary: oklch(0.22 0.04 155);
+  --secondary: oklch(0.21 0.018 25);
   --secondary-foreground: oklch(0.95 0.01 80);
-  --muted: oklch(0.2 0.035 155);
-  --muted-foreground: oklch(0.68 0.03 40);
-  --accent: oklch(0.28 0.07 150);
+  --muted: oklch(0.19 0.015 25);
+  --muted-foreground: oklch(0.68 0.015 25);
+  --accent: oklch(0.28 0.09 27);
   --accent-foreground: oklch(0.98 0 0);
   --destructive: oklch(0.6 0.24 27);
   --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(0.32 0.07 150);
-  --input: oklch(0.32 0.07 150);
-  --ring: oklch(0.68 0.17 150);
+  --border: oklch(0.34 0.08 27);
+  --input: oklch(0.34 0.08 27);
+  --ring: oklch(0.62 0.23 27);
   --gold: oklch(0.8 0.13 85);
-  --money: oklch(0.55 0.1 150);
+  --money: oklch(0.52 0.20 27);
   --shadow-red: 0 10px 30px -15px oklch(0.58 0.23 27 / 0.5);
   --chart-1: oklch(0.58 0.23 27);
   --chart-2: oklch(0.8 0.13 85);
-  --chart-3: oklch(0.55 0.1 150);
+  --chart-3: oklch(0.52 0.20 27);
   --chart-4: oklch(0.7 0.1 40);
   --chart-5: oklch(0.5 0.1 20);
-  --sidebar: oklch(0.15 0.035 155);
+  --sidebar: oklch(0.13 0.012 25);
   --sidebar-foreground: oklch(0.95 0.01 80);
-  --sidebar-primary: oklch(0.68 0.17 150);
+  --sidebar-primary: oklch(0.62 0.23 27);
   --sidebar-primary-foreground: oklch(0.98 0 0);
-  --sidebar-accent: oklch(0.28 0.07 150);
+  --sidebar-accent: oklch(0.28 0.09 27);
   --sidebar-accent-foreground: oklch(0.98 0 0);
-  --sidebar-border: oklch(0.32 0.07 150);
+  --sidebar-border: oklch(0.34 0.08 27);
   --sidebar-ring: oklch(0.58 0.23 27);
 }
 
@@ -129,7 +129,7 @@
 }
 
 
-/* Minecraft-inspired KIDS Gaming Hub visual refresh */
+/* Scarface red and black KIDS Gaming Hub visual refresh */
 .money-bg.minecraft-bg {
   position: relative;
   isolation: isolate;
@@ -141,13 +141,13 @@
 }
 .money-bg.minecraft-bg::before {
   content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
-  background-image: linear-gradient(rgba(74,222,128,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(74,222,128,.035) 1px, transparent 1px);
+  background-image: linear-gradient(rgba(248,45,55,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(248,45,55,.035) 1px, transparent 1px);
   background-size: 32px 32px;
 }
-.money-bg.minecraft-bg header { background: rgba(3,12,8,.82); border-color: rgba(74,222,128,.22); }
-.money-bg.minecraft-bg nav button { border-color: rgba(74,222,128,.2); background: rgba(4,18,12,.75); }
-.money-bg.minecraft-bg nav button:hover, .money-bg.minecraft-bg nav button:focus-visible { border-color: rgba(74,222,128,.7); }
-.money-bg.minecraft-bg nav button.bg-primary { background: #16834b; color: white; border-color: #4ade80; }
-.money-bg.minecraft-bg .btn { background: linear-gradient(180deg,#22a45c,#12683b); box-shadow: 0 3px 0 #084326; }
-.money-bg.minecraft-bg .btn-outline { border-color: rgba(74,222,128,.65); color: #86efac; }
+.money-bg.minecraft-bg header { background: rgba(3,12,8,.82); border-color: rgba(248,45,55,.25); }
+.money-bg.minecraft-bg nav button { border-color: rgba(248,45,55,.22); background: rgba(4,18,12,.75); }
+.money-bg.minecraft-bg nav button:hover, .money-bg.minecraft-bg nav button:focus-visible { border-color: rgba(248,45,55,.75); }
+.money-bg.minecraft-bg nav button.bg-primary { background: #a80f18; color: white; border-color: #f0444e; }
+.money-bg.minecraft-bg .btn { background: linear-gradient(180deg,#e32630,#8f0d15); box-shadow: 0 3px 0 #45070b; }
+.money-bg.minecraft-bg .btn-outline { border-color: rgba(248,45,55,.7); color: #ff6b70; }
 @media (max-width: 640px) { .money-bg.minecraft-bg { background-attachment: scroll; } }
