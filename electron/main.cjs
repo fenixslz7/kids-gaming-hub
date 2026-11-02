@@ -140,6 +140,61 @@ ipcMain.handle("clip-save", async (_e, { data, suggestedName }) => {
   return { canceled: false, filePath: result.filePath };
 });
 
+
+function minecraftDir() {
+  const candidates = [
+    process.env.APPDATA && path.join(process.env.APPDATA, ".minecraft"),
+    path.join(os.homedir(), "AppData", "Roaming", ".minecraft"),
+    path.join(os.homedir(), ".minecraft"),
+  ].filter(Boolean);
+  return candidates.find((dir) => fs.existsSync(dir)) || candidates[0];
+}
+ipcMain.handle("minecraft-apply-profile", (_event, profile) => {
+  const dir = minecraftDir();
+  if (!fs.existsSync(dir)) throw new Error("Pasta .minecraft não encontrada. Abra o Minecraft Java uma vez e tente novamente.");
+  const file = path.join(dir, "options.txt");
+  if (!fs.existsSync(file)) throw new Error("options.txt não encontrado. Inicie o Minecraft Java e feche o jogo antes de aplicar.");
+  const presets = {
+    quality: { gfx_graphics: "1", renderDistance: "16", simulationDistance: "12", particles: "0", clouds: "2", ao: "true", entityShadows: "true", biomeBlendRadius: "5", mipmapLevels: "4", maxFps: "120" },
+    balanced: { gfx_graphics: "0", renderDistance: "10", simulationDistance: "8", particles: "1", clouds: "1", ao: "true", entityShadows: "true", biomeBlendRadius: "2", mipmapLevels: "2", maxFps: "0" },
+    pvp: { gfx_graphics: "0", renderDistance: "6", simulationDistance: "5", particles: "2", clouds: "0", ao: "false", entityShadows: "false", biomeBlendRadius: "0", mipmapLevels: "0", maxFps: "0" },
+  };
+  const updates = presets[profile];
+  if (!updates) throw new Error("Perfil Minecraft inválido.");
+  const original = fs.readFileSync(file, "utf8");
+  fs.copyFileSync(file, file + ".kids-backup");
+  const lines = original.split(/\r?\n/);
+  const handled = new Set();
+  const next = lines.map((line) => {
+    const match = line.match(/^([^:]+):(.*)$/);
+    if (!match || !(match[1] in updates)) return line;
+    handled.add(match[1]);
+    return match[1] + ":" + updates[match[1]];
+  });
+  for (const [key, value] of Object.entries(updates)) if (!handled.has(key)) next.push(key + ":" + value);
+  fs.writeFileSync(file, next.join("\n").replace(/\n+$/, "") + "\n", "utf8");
+  return { file, backup: file + ".kids-backup" };
+});
+ipcMain.handle("minecraft-import-file", async (_event, kind) => {
+  if (kind !== "mod" && kind !== "resourcepack") throw new Error("Tipo de arquivo inválido.");
+  const result = await dialog.showOpenDialog(mainWindow, {
+    title: kind === "mod" ? "Selecione o mod .jar" : "Selecione o pacote de textura .zip",
+    properties: ["openFile"],
+    filters: kind === "mod" ? [{ name: "Mods Java", extensions: ["jar"] }] : [{ name: "Resource packs", extensions: ["zip"] }],
+  });
+  if (result.canceled || !result.filePaths[0]) return { canceled: true };
+  const source = result.filePaths[0];
+  const expected = kind === "mod" ? ".jar" : ".zip";
+  if (path.extname(source).toLowerCase() !== expected) throw new Error("Formato de arquivo inválido.");
+  const dir = minecraftDir();
+  const targetDir = path.join(dir, kind === "mod" ? "mods" : "resourcepacks");
+  fs.mkdirSync(targetDir, { recursive: true });
+  let target = path.join(targetDir, path.basename(source));
+  if (fs.existsSync(target)) target = path.join(targetDir, path.basename(source, expected) + "-" + Date.now() + expected);
+  fs.copyFileSync(source, target);
+  return { canceled: false, filePath: target };
+});
+
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1400,
