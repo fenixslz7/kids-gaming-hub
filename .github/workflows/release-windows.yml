@@ -21,8 +21,11 @@ jobs:
         with:
           node-version: 22
 
+      - name: Clear npm cache
+        run: npm cache clean --force
+
       - name: Install dependencies
-        run: npm install
+        run: npm install --no-audit --no-fund --legacy-peer-deps
 
       - name: Assign unique release version
         shell: bash
