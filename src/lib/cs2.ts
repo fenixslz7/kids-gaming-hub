@@ -94,7 +94,7 @@ export function crosshairCfg(c: Crosshair) {
   ];
 }
 
-export function buildAutoexec(opts: { dpi: number; sens: number; crosshair: Crosshair; optimize: boolean; title?: string }) {
+export function buildAutoexec(opts: { dpi: number; sens: number; crosshair: Crosshair; optimize: boolean; title?: string | undefined }) {
   return [
     `// KIDS PANEL — autoexec.cfg ${opts.title ? `(${opts.title})` : ""}`,
     `// DPI do mouse recomendado: ${opts.dpi} (ajuste no software do seu mouse)`,
