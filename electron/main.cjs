@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog, desktopCapturer, globalShortcut } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const os = require("os");
@@ -107,6 +107,39 @@ ipcMain.handle("save-video-config", (_e, payload) => {
   return { file: profile.file, backup: fs.existsSync(profile.file + ".kids-backup") ? profile.file + ".kids-backup" : null };
 });
 
+
+let clipHotkey = "F12";
+function registerClipHotkey(accelerator) {
+  globalShortcut.unregister(clipHotkey);
+  const normalized = String(accelerator || "F12").trim();
+  if (!/^(F[1-9]|F1[0-2]|Ctrl\+F[1-9]|Ctrl\+F1[0-2]|Alt\+F[1-9]|Alt\+F1[0-2]|Shift\+F[1-9]|Shift\+F1[0-2])$/.test(normalized)) {
+    throw new Error("Atalho inválido. Use F1–F12 ou Ctrl/Alt/Shift + F1–F12.");
+  }
+  const registered = globalShortcut.register(normalized, () => {
+    if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send("clip-hotkey");
+  });
+  if (!registered) throw new Error("Essa tecla já está sendo usada por outro aplicativo. Escolha outro atalho.");
+  clipHotkey = normalized;
+  return clipHotkey;
+}
+
+ipcMain.handle("clip-sources", async () => {
+  const sources = await desktopCapturer.getSources({ types: ["screen", "window"], thumbnailSize: { width: 240, height: 135 }, fetchWindowIcons: false });
+  return sources.map((s) => ({ id: s.id, name: s.name, thumbnail: s.thumbnail.toDataURL() }));
+});
+ipcMain.handle("clip-set-hotkey", (_e, accelerator) => registerClipHotkey(accelerator));
+ipcMain.handle("clip-save", async (_e, { data, suggestedName }) => {
+  if (typeof data !== "string" || data.length > 600 * 1024 * 1024) throw new Error("Arquivo de clipe inválido ou muito grande (limite 450 MB).");
+  const result = await dialog.showSaveDialog(mainWindow, {
+    title: "Salvar clipe",
+    defaultPath: suggestedName || "KIDS-Clip.webm",
+    filters: [{ name: "Vídeo WebM", extensions: ["webm"] }],
+  });
+  if (result.canceled || !result.filePath) return { canceled: true };
+  fs.writeFileSync(result.filePath, Buffer.from(data, "base64"));
+  return { canceled: false, filePath: result.filePath };
+});
+
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1400,
@@ -149,4 +182,5 @@ function setupAutoUpdates() {
 
 app.whenReady().then(() => { createWindow(); setupAutoUpdates(); });
 app.on("activate", () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
+app.on("will-quit", () => globalShortcut.unregisterAll());
 app.on("window-all-closed", () => { if (process.platform !== "darwin") app.quit(); });
